@@ -1,5 +1,46 @@
-.App {
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  font-size: 62.5%;
+}
+
+.input-container {
+  padding-bottom: 4rem;
+}
+
+.input {
+  height: 3rem;
+  width: 20rem;
   text-align: center;
+  border: 2px solid black;
+}
+
+button {
+  height: 3rem;
+  width: 8rem;
+  border: 2px solid black;
+}
+
+.App {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  border: 2px solid rebeccapurple;
+  height: 100vh;
+  font-size: 5rem;
+}
+
+.display-data {
+  border: 2px solid black;
+  border-radius: 0.5rem;
+  width: 80%;
+  height: 50rem;
 }
 
 .App-logo {
