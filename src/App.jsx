@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useMemo } from 'react';
 import SearchInput from './components/SearchInput';
 
-// import { BsSunrise, BsSunset } from 'react-icons/bs';
+import { BsSunrise, BsSunset } from 'react-icons/bs';
 // import './App.css';
 
 // const icons = {};
@@ -17,7 +17,7 @@ function App() {
 
   const weatherUrl = useMemo(
     () =>
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${process.env.REACT_APP_API_KEY}`,
+      `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.REACT_APP_API_KEY}`,
     [city]
   );
 
@@ -29,13 +29,24 @@ function App() {
           description: data.weather[0].description,
           iconUrl: getIconUrl(data.weather[0].icon),
           city: data.name,
-          temp: data.main.temp,
-          feelsLike: data.main.feels_like,
-          tempMin: data.main.temp_min,
-          tempMax: data.main.temp_max,
+          temp: Math.round(data.main.temp),
+          feelsLike: Math.round(data.main.feels_like),
+          tempMin: Math.round(data.main.temp_min),
+          tempMax: Math.round(data.main.temp_max),
           country: data.sys.country,
-          sunrise: new Date(data.sys.sunrise).toLocaleTimeString(),
-          sunset: new Date(data.sys.sunset).toLocaleTimeString(),
+          sunrise: new Date(data.sys.sunrise * 1000).toLocaleTimeString(
+            'en-US',
+            {
+              hour: '2-digit',
+              minute: '2-digit',
+              hour12: true,
+            }
+          ),
+          sunset: new Date(data.sys.sunset * 1000).toLocaleTimeString('en-US', {
+            hour: '2-digit',
+            minute: '2-digit',
+            hour12: true,
+          }),
         })
       );
   }, [weatherUrl]);
@@ -53,6 +64,8 @@ function App() {
 
   // const weatsherStats = [];
 
+  const currentDay = new Date().toString();
+
   return (
     <div className='min-h-screen flex flex-col items-center justify-center  antialiased bg-gray-200'>
       <div className='grid gap-8 m-12'>
@@ -60,34 +73,67 @@ function App() {
           Weather
         </h1>
       </div>
-      {/* City Title and weather description */}
-      <div className='text-xl p-8 rounded-3xl shadow-2xl bg-white max-w-3xl w-full grid gap-8'>
+
+      <div className='text-xl p-6 rounded-[1.75rem] shadow-2xl  bg-white max-w-3xl w-full grid gap-8'>
+        {/* Search input */}
         <SearchInput
           handleChange={handleChange}
           search={search}
           handleClick={handleClick}
         />
-        <div className='grid m-auto text-2xl font-bold w-full'>
-          <h2>
-            {weatherResult.city} {weatherResult.country}
-          </h2>
+        <div className='grid m-auto w-full'>
           <div className='flex justify-between items-center'>
-            <h3>{weatherResult.description}</h3>
             <div>
+              {/* City name and country */}
+              <h2 className=' text-2xl font-bold'>
+                {weatherResult.city}{' '}
+                <span className='font-medium opacity-40'>-</span>{' '}
+                {weatherResult.country}
+              </h2>
+              <span className='text-sm font-medium text-gray-600 '>
+                {currentDay}
+              </span>
+              <h3 className='font-medium text-gray-600'>
+                {weatherResult.description}
+              </h3>
+            </div>
+            <div className='h-24 w-24 rounded-full bg-purple-500'>
               <img src={weatherResult.iconUrl} alt='weather' />
             </div>
           </div>
         </div>
-        {/* Weather data info  */}
-        <div className='p-16'>
-          <div className='grid grid-cols-2 gap-12 place-items-center'>
-            <h3>Temp: {weatherResult.temp}</h3>
-            <h3>Feels like: {weatherResult.feelsLike}</h3>
 
-            <h3>Min: {weatherResult.tempMin}</h3>
-            <h3>Max: {weatherResult.tempMax}</h3>
-            <h3>Sunrise: {weatherResult.sunrise}</h3>
-            <h3>Sunset: {weatherResult.sunset}</h3>
+        {/* Weather data info  */}
+        <div className='m-auto'>
+          <div className='flex space-x-14 text-center'>
+            <h3>
+              <span className='flex font-bold text-purple-800'>Temp</span>
+              {weatherResult.temp}&deg;C
+            </h3>
+            <h3>
+              <span className='flex font-bold text-purple-800'>Feels like</span>
+              {weatherResult.feelsLike}&deg;C
+            </h3>
+            <h3>
+              <span className='flex font-bold text-purple-800'>Min</span>{' '}
+              {weatherResult.tempMin}&deg;C
+            </h3>
+            <h3>
+              <span className='flex font-bold text-purple-800'>Max</span>{' '}
+              {weatherResult.tempMax}&deg;C
+            </h3>
+            <h3>
+              <span className='text-[1.73rem] text-yellow-600 grid place-items-center'>
+                <BsSunrise />
+              </span>{' '}
+              {weatherResult.sunrise}
+            </h3>
+            <h3>
+              <span className='text-[1.73rem] text-yellow-600 grid place-items-center'>
+                <BsSunset />
+              </span>{' '}
+              {weatherResult.sunset}
+            </h3>
           </div>
         </div>
       </div>
@@ -96,3 +142,6 @@ function App() {
 }
 
 export default App;
+
+// Todo
+// 1- convert temp to celsius
