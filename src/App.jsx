@@ -4,8 +4,6 @@ import SearchInput from './components/SearchInput';
 import { BsSunrise, BsSunset } from 'react-icons/bs';
 // import './App.css';
 
-// const icons = {};
-
 function getIconUrl(iconId) {
   return `http://openweathermap.org/img/wn/${iconId}@2x.png`;
 }
@@ -62,13 +60,41 @@ function App() {
     setSearch('');
   }
 
-  // const weatsherStats = [];
+  const weatherStats = [
+    {
+      label: 'Temp',
+      value: `${weatherResult.temp}°C`,
+    },
+    {
+      label: 'Feels like',
+      value: `${weatherResult.feelsLike}°C`,
+    },
+    {
+      label: 'Min',
+      value: `${weatherResult.tempMin}°C`,
+    },
+    {
+      label: 'Max',
+      value: `${weatherResult.tempMax}°C`,
+    },
+  ];
+
+  const sunStats = [
+    {
+      label: <BsSunrise />,
+      value: `${weatherResult.sunrise}`,
+    },
+    {
+      label: <BsSunset />,
+      value: `${weatherResult.sunset}`,
+    },
+  ];
 
   const currentDay = new Date().toString();
 
   return (
     <div className='min-h-screen flex flex-col items-center justify-center  antialiased bg-gray-200'>
-      <div className='grid gap-8 m-12'>
+      <div className='grid m-12'>
         <h1 className='text-purple-800 text-8xl font-bold text-center'>
           Weather
         </h1>
@@ -104,36 +130,25 @@ function App() {
         </div>
 
         {/* Weather data info  */}
-        <div className='m-auto'>
+        <div className='m-auto py-8'>
           <div className='flex space-x-14 text-center'>
-            <h3>
-              <span className='flex font-bold text-purple-800'>Temp</span>
-              {weatherResult.temp}&deg;C
-            </h3>
-            <h3>
-              <span className='flex font-bold text-purple-800'>Feels like</span>
-              {weatherResult.feelsLike}&deg;C
-            </h3>
-            <h3>
-              <span className='flex font-bold text-purple-800'>Min</span>{' '}
-              {weatherResult.tempMin}&deg;C
-            </h3>
-            <h3>
-              <span className='flex font-bold text-purple-800'>Max</span>{' '}
-              {weatherResult.tempMax}&deg;C
-            </h3>
-            <h3>
-              <span className='text-[1.73rem] text-yellow-600 grid place-items-center'>
-                <BsSunrise />
-              </span>{' '}
-              {weatherResult.sunrise}
-            </h3>
-            <h3>
-              <span className='text-[1.73rem] text-yellow-600 grid place-items-center'>
-                <BsSunset />
-              </span>{' '}
-              {weatherResult.sunset}
-            </h3>
+            {weatherStats.map(stats => (
+              <div key={stats.label}>
+                <span className='flex font-bold text-purple-800'>
+                  {stats.label}
+                </span>
+                <h3>{stats.value}</h3>
+              </div>
+            ))}
+
+            {sunStats.map(stats => (
+              <div key={stats.label}>
+                <span className='text-[1.73rem] text-yellow-600 grid place-items-center'>
+                  {stats.label}
+                </span>
+                <h3>{stats.value}</h3>
+              </div>
+            ))}
           </div>
         </div>
       </div>
@@ -142,6 +157,3 @@ function App() {
 }
 
 export default App;
-
-// Todo
-// 1- convert temp to celsius
