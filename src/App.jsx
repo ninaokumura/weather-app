@@ -109,11 +109,13 @@ function App() {
 
       <div className='text-xl p-4 rounded-[1.75rem] shadow-2xl  bg-white max-w-3xl w-full grid gap-8'>
         {/* Search input */}
-        <SearchInput
-          handleChange={handleChange}
-          search={search}
-          handleClick={handleClick}
-        />
+        <div className='w-full'>
+          <SearchInput
+            handleChange={handleChange}
+            search={search}
+            handleClick={handleClick}
+          />
+        </div>
         <div className='grid m-w-full'>
           <div className='sm:flex sm:justify-between sm:items-center '>
             <div className='flex flex-col '>
@@ -141,7 +143,7 @@ function App() {
         {/* Weather data info  */}
         <div className='sm:py-8 sm:m-auto'>
           <div className='grid place-items-center'>
-            <div className='md:flex md:space-x-8 grid grid-cols-2 gap-6'>
+            <div className='md:flex md:space-x-8 grid grid-cols-2 gap-6 md:text-center'>
               {weatherStats.map(stats => (
                 <div key={stats.label}>
                   <span className='font-bold text-purple-800 text-center'>
@@ -153,7 +155,7 @@ function App() {
 
               {sunStats.map(stats => (
                 <div key={stats.label}>
-                  <span className='text-[1.73rem] text-yellow-600 grid sm:place-items-center grid-cols-2'>
+                  <span className='text-[1.73rem] text-yellow-600 md:grid md:place-items-center'>
                     {stats.label}
                   </span>
                   <h3>{stats.value}</h3>
