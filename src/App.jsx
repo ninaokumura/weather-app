@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import SearchInput from './components/SearchInput';
 import { BsSunrise, BsSunset } from 'react-icons/bs';
+import { CgSpinner } from 'react-icons/cg';
 import { useGeolocation } from 'react-use';
 import { getWeatherByCity, getWeatherByGeoLocation } from './lib/weatherApi';
 // import './App.css';
@@ -13,18 +14,25 @@ function App() {
   const [city, setCity] = useState('');
   const [search, setSearch] = useState('');
   const [weatherResult, setWeatherResult] = useState({});
+  const [isFetching, setFetching] = useState(false);
 
   const geoLocation = useGeolocation();
 
   useEffect(() => {
+    if (!city && geoLocation.loading) {
+      return;
+    }
     const weatherPromise =
       city.length > 0
         ? getWeatherByCity(city)
         : getWeatherByGeoLocation(geoLocation.latitude, geoLocation.longitude);
-    // const weatherPromise = getWeatherByCity(city);
+
+    setFetching(true);
+
     weatherPromise
       .then(response => response.json())
-      .then(data =>
+      .then(data => {
+        setFetching(false);
         setWeatherResult({
           description: data.weather[0].description,
           iconUrl: getIconUrl(data.weather[0].icon),
@@ -47,9 +55,9 @@ function App() {
             minute: '2-digit',
             hour12: true,
           }),
-        })
-      );
-  }, [city, geoLocation.latitude, geoLocation.longitude]);
+        });
+      });
+  }, [city, geoLocation.latitude, geoLocation.loading, geoLocation.longitude]);
 
   function handleChange(event) {
     event.preventDefault();
@@ -156,8 +164,8 @@ function App() {
                     </div>
                   ))}
 
-                  {sunStats.map(stats => (
-                    <div key={stats.label}>
+                  {sunStats.map((stats, index) => (
+                    <div key={index}>
                       <span className='text-[1.73rem] text-yellow-600 md:grid md:place-items-center'>
                         {stats.label}
                       </span>
@@ -170,7 +178,13 @@ function App() {
           </>
         ) : (
           <div className='text-center text-2xl'>
-            Please select a city or enable geolocation.
+            {geoLocation.loading || isFetching ? (
+              <div>
+                <CgSpinner className='animate-spin m-auto text-6xl' />
+              </div>
+            ) : (
+              'Please select a city or enable geolocation.'
+            )}
           </div>
         )}
       </div>
