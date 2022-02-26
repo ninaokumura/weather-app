@@ -1,4 +1,4 @@
-const API_URL = 'http://api.openweathermap.org/data/2.5/weather';
+const API_URL = '//api.openweathermap.org/data/2.5/weather';
 
 export function getWeatherByCity(cityName) {
   const weatherUrl = `${API_URL}?q=${cityName}&units=metric&appid=${process.env.REACT_APP_API_KEY}`;
