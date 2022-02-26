@@ -90,65 +90,76 @@ function App() {
     },
   ];
 
-  const currentDay = new Date().toString();
+  const currentDay = new Date().toLocaleString('en-US', {
+    year: 'numeric',
+    month: 'long',
+    day: 'numeric',
+    hour: 'numeric',
+    minute: 'numeric',
+    second: 'numeric',
+  });
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center  antialiased bg-gray-200'>
+    <div className='min-h-screen flex flex-col items-center justify-center  antialiased bg-gray-200 p-8'>
       <div className='grid m-12'>
-        <h1 className='text-purple-800 text-8xl font-bold text-center'>
+        <h1 className='text-purple-800 md:text-8xl font-bold text-center text-5xl'>
           Weather
         </h1>
       </div>
 
-      <div className='text-xl p-6 rounded-[1.75rem] shadow-2xl  bg-white max-w-3xl w-full grid gap-8'>
+      <div className='text-xl p-4 rounded-[1.75rem] shadow-2xl  bg-white max-w-3xl w-full grid gap-8'>
         {/* Search input */}
         <SearchInput
           handleChange={handleChange}
           search={search}
           handleClick={handleClick}
         />
-        <div className='grid m-auto w-full'>
-          <div className='flex justify-between items-center'>
-            <div>
+        <div className='grid m-w-full'>
+          <div className='sm:flex sm:justify-between sm:items-center '>
+            <div className='flex flex-col '>
               {/* City name and country */}
               <h2 className=' text-2xl font-bold'>
                 {weatherResult.city}{' '}
                 <span className='font-medium opacity-40'>-</span>{' '}
                 {weatherResult.country}
               </h2>
-              <span className='text-sm font-medium text-gray-600 '>
-                {currentDay}
-              </span>
-              <h3 className='font-medium text-gray-600'>
-                {weatherResult.description}
-              </h3>
+              <div className='flex flex-col gap-4'>
+                <span className='text-[12px] sm:text-sm font-medium text-gray-600 '>
+                  {currentDay}
+                </span>
+                <h3 className='font-medium text-gray-600'>
+                  {weatherResult.description}
+                </h3>
+              </div>
             </div>
-            <div className='h-24 w-24 rounded-full bg-purple-500'>
+            <div className='w-20 h-20 flex sm:h-24 sm:w-24 rounded-full bg-purple-500'>
               <img src={weatherResult.iconUrl} alt='weather' />
             </div>
           </div>
         </div>
 
         {/* Weather data info  */}
-        <div className='m-auto py-8'>
-          <div className='flex space-x-14 text-center'>
-            {weatherStats.map(stats => (
-              <div key={stats.label}>
-                <span className='flex font-bold text-purple-800'>
-                  {stats.label}
-                </span>
-                <h3>{stats.value}</h3>
-              </div>
-            ))}
+        <div className='sm:py-8 sm:m-auto'>
+          <div className='grid place-items-center'>
+            <div className='md:flex md:space-x-8 grid grid-cols-2 gap-6'>
+              {weatherStats.map(stats => (
+                <div key={stats.label}>
+                  <span className='font-bold text-purple-800 text-center'>
+                    {stats.label}
+                  </span>
+                  <h3>{stats.value}</h3>
+                </div>
+              ))}
 
-            {sunStats.map(stats => (
-              <div key={stats.label}>
-                <span className='text-[1.73rem] text-yellow-600 grid place-items-center'>
-                  {stats.label}
-                </span>
-                <h3>{stats.value}</h3>
-              </div>
-            ))}
+              {sunStats.map(stats => (
+                <div key={stats.label}>
+                  <span className='text-[1.73rem] text-yellow-600 grid sm:place-items-center grid-cols-2'>
+                    {stats.label}
+                  </span>
+                  <h3>{stats.value}</h3>
+                </div>
+              ))}
+            </div>
           </div>
         </div>
       </div>
