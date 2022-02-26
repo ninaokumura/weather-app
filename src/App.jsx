@@ -1,7 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import React, { useState, useEffect } from 'react';
 import SearchInput from './components/SearchInput';
-
 import { BsSunrise, BsSunset } from 'react-icons/bs';
+import { useGeolocation } from 'react-use';
+import { getWeatherByCity, getWeatherByGeoLocation } from './lib/weatherApi';
 // import './App.css';
 
 function getIconUrl(iconId) {
@@ -13,14 +14,15 @@ function App() {
   const [search, setSearch] = useState('');
   const [weatherResult, setWeatherResult] = useState({});
 
-  const weatherUrl = useMemo(
-    () =>
-      `http://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${process.env.REACT_APP_API_KEY}`,
-    [city]
-  );
+  const geoLocation = useGeolocation();
 
   useEffect(() => {
-    fetch(weatherUrl)
+    const weatherPromise =
+      city.length > 0
+        ? getWeatherByCity(city)
+        : getWeatherByGeoLocation(geoLocation.latitude, geoLocation.longitude);
+    // const weatherPromise = getWeatherByCity(city);
+    weatherPromise
       .then(response => response.json())
       .then(data =>
         setWeatherResult({
@@ -47,7 +49,7 @@ function App() {
           }),
         })
       );
-  }, [weatherUrl]);
+  }, [city, geoLocation.latitude, geoLocation.longitude]);
 
   function handleChange(event) {
     event.preventDefault();
@@ -116,54 +118,61 @@ function App() {
             handleClick={handleClick}
           />
         </div>
-        <div className='grid m-w-full'>
-          <div className='flex justify-between items-center '>
-            <div className='flex flex-col '>
-              {/* City name and country */}
-              <h2 className=' text-2xl font-bold'>
-                {weatherResult.city}{' '}
-                <span className='font-medium opacity-40'>-</span>{' '}
-                {weatherResult.country}
-              </h2>
-              <div className='flex flex-col gap-4'>
-                <span className='text-[12px] sm:text-sm font-medium text-gray-600 '>
-                  {currentDay}
-                </span>
-                <h3 className='font-medium text-gray-600 '>
-                  {weatherResult.description}
-                </h3>
+        {weatherResult.temp ? (
+          <>
+            <div className='grid m-w-full'>
+              <div className='flex justify-between items-center '>
+                <div className='flex flex-col '>
+                  {/* City name and country */}
+                  <h2 className=' text-2xl font-bold'>
+                    {weatherResult.city}{' '}
+                    <span className='font-medium opacity-40'>-</span>{' '}
+                    {weatherResult.country}
+                  </h2>
+                  <div className='flex flex-col gap-4'>
+                    <span className='text-[12px] sm:text-sm font-medium text-gray-600 '>
+                      {currentDay}
+                    </span>
+                    <h3 className='font-medium text-gray-600 '>
+                      {weatherResult.description}
+                    </h3>
+                  </div>
+                </div>
+                <div className='w-20 h-20 flex sm:h-24 sm:w-24 rounded-full bg-purple-500'>
+                  <img src={weatherResult.iconUrl} alt='weather' />
+                </div>
               </div>
             </div>
-            <div className='w-20 h-20 flex sm:h-24 sm:w-24 rounded-full bg-purple-500'>
-              <img src={weatherResult.iconUrl} alt='weather' />
-            </div>
-          </div>
-        </div>
+            {/* Weather data info  */}
+            <div className='sm:py-8 sm:m-auto w-full'>
+              <div className='grid place-items-center'>
+                <div className='sm:flex sm:justify-evenly grid grid-cols-2 gap-6 sm:text-center sm:flex-1 sm:w-full'>
+                  {weatherStats.map(stats => (
+                    <div key={stats.label}>
+                      <span className='font-bold text-purple-800 text-center'>
+                        {stats.label}
+                      </span>
+                      <h3>{stats.value}</h3>
+                    </div>
+                  ))}
 
-        {/* Weather data info  */}
-        <div className='sm:py-8 sm:m-auto w-full'>
-          <div className='grid place-items-center'>
-            <div className='sm:flex sm:justify-evenly grid grid-cols-2 gap-6 sm:text-center sm:flex-1 sm:w-full'>
-              {weatherStats.map(stats => (
-                <div key={stats.label}>
-                  <span className='font-bold text-purple-800 text-center'>
-                    {stats.label}
-                  </span>
-                  <h3>{stats.value}</h3>
+                  {sunStats.map(stats => (
+                    <div key={stats.label}>
+                      <span className='text-[1.73rem] text-yellow-600 md:grid md:place-items-center'>
+                        {stats.label}
+                      </span>
+                      <h3>{stats.value}</h3>
+                    </div>
+                  ))}
                 </div>
-              ))}
-
-              {sunStats.map(stats => (
-                <div key={stats.label}>
-                  <span className='text-[1.73rem] text-yellow-600 md:grid md:place-items-center'>
-                    {stats.label}
-                  </span>
-                  <h3>{stats.value}</h3>
-                </div>
-              ))}
+              </div>
             </div>
+          </>
+        ) : (
+          <div className='text-center text-2xl'>
+            Please select a city or enable geolocation.
           </div>
-        </div>
+        )}
       </div>
     </div>
   );
