@@ -153,26 +153,24 @@ function App() {
             </div>
             {/* Weather data info  */}
             <div className='sm:py-8 sm:m-auto w-full'>
-              <div className='grid place-items-center'>
-                <div className='sm:flex sm:justify-evenly grid grid-cols-2 gap-6 sm:text-center sm:flex-1 sm:w-full'>
-                  {weatherStats.map(stats => (
-                    <div key={stats.label}>
-                      <span className='font-bold text-purple-800 text-center'>
-                        {stats.label}
-                      </span>
-                      <h3>{stats.value}</h3>
-                    </div>
-                  ))}
+              <div className='sm:flex sm:justify-evenly grid grid-cols-2 gap-6 sm:text-center sm:flex-1 sm:w-full'>
+                {weatherStats.map(stats => (
+                  <div className='grid place-items-center' key={stats.label}>
+                    <span className='font-bold text-purple-800 text-center'>
+                      {stats.label}
+                    </span>
+                    <h3>{stats.value}</h3>
+                  </div>
+                ))}
 
-                  {sunStats.map((stats, index) => (
-                    <div key={index}>
-                      <span className='text-[1.73rem] text-yellow-600 md:grid md:place-items-center'>
-                        {stats.label}
-                      </span>
-                      <h3>{stats.value}</h3>
-                    </div>
-                  ))}
-                </div>
+                {sunStats.map((stats, index) => (
+                  <div className='grid place-items-center' key={index}>
+                    <span className='text-[1.73rem] text-yellow-600 md:grid md:place-items-center'>
+                      {stats.label}
+                    </span>
+                    <h3>{stats.value}</h3>
+                  </div>
+                ))}
               </div>
             </div>
           </>
