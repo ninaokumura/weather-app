@@ -100,14 +100,14 @@ function App() {
   });
 
   return (
-    <div className='min-h-screen flex flex-col items-center justify-center  antialiased bg-gray-200 p-8'>
+    <div className='min-h-screen flex flex-col items-center justify-center  antialiased bg-gray-200 p-4'>
       <div className='grid m-12'>
         <h1 className='text-purple-800 md:text-8xl font-bold text-center text-5xl'>
           Weather
         </h1>
       </div>
 
-      <div className='text-xl p-4 rounded-[1.75rem] shadow-2xl  bg-white max-w-3xl w-full grid gap-8'>
+      <div className='text-xl p-6 rounded-[1.75rem] shadow-2xl  bg-white max-w-3xl w-full grid gap-8'>
         {/* Search input */}
         <div className='w-full'>
           <SearchInput
@@ -117,7 +117,7 @@ function App() {
           />
         </div>
         <div className='grid m-w-full'>
-          <div className='sm:flex sm:justify-between sm:items-center '>
+          <div className='flex justify-between items-center '>
             <div className='flex flex-col '>
               {/* City name and country */}
               <h2 className=' text-2xl font-bold'>
@@ -129,7 +129,7 @@ function App() {
                 <span className='text-[12px] sm:text-sm font-medium text-gray-600 '>
                   {currentDay}
                 </span>
-                <h3 className='font-medium text-gray-600'>
+                <h3 className='font-medium text-gray-600 '>
                   {weatherResult.description}
                 </h3>
               </div>
@@ -141,9 +141,9 @@ function App() {
         </div>
 
         {/* Weather data info  */}
-        <div className='sm:py-8 sm:m-auto'>
+        <div className='sm:py-8 sm:m-auto w-full'>
           <div className='grid place-items-center'>
-            <div className='md:flex md:space-x-8 grid grid-cols-2 gap-6 md:text-center'>
+            <div className='sm:flex sm:justify-evenly grid grid-cols-2 gap-6 sm:text-center sm:flex-1 sm:w-full'>
               {weatherStats.map(stats => (
                 <div key={stats.label}>
                   <span className='font-bold text-purple-800 text-center'>
