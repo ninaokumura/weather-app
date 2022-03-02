@@ -2,6 +2,10 @@
 
 React Weather App
 
+![weather-app](https://user-images.githubusercontent.com/79299205/156283056-a8b6ccb8-9df4-44a3-9ce5-d43ca8acc408.JPG)
+
+![weather-app-mobile](https://user-images.githubusercontent.com/79299205/156283074-a858b327-1fea-4636-8d00-d990b018c5f0.JPG)
+
 ## Description
 
 - Get the weather by city name and geolocation.
